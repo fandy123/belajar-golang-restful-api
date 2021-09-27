@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package webmerchantrefund;
+option go_package = "./pbs";
+
+message RequestRefund {
+  string merchant_code = 1;
+  string trx_date = 2;
+  string trx_no = 3;
+  string trx_ref_no = 4;
+  string customer_name = 5;
+  double amount = 6;
+  int32 payment_method = 7;
+  int32 settlement_status = 8;
+  int32 withdrawal_status = 9;
+  int32 trx_id = 10;
+  int32 merchant_id = 11;
+  double trx_amount = 12;
+}
+
+message GetRequestRefundRequest { int32 settlement_id = 1; }
+message GetRequestRefundResponse { RequestRefund request_refund = 1; }
+
+message PostRequestRefundRequest {
+  int32 trx_id = 1;
+  double amount = 2;
+  double admin_fee = 3;
+  int32 merchant_id = 4;
+  int32 settlement_id = 5;
+}
+message PostRequestRefundResponse {}
+
+message Refund {
+  int32 id = 1;
+  string request_date = 2;
+  string trx_number = 3;
+  string trx_date = 4;
+  string payment_channel = 5;
+  double trx_amount = 6;
+  double refund_amount = 7;
+  string status = 8;
+  string trx_ref_no = 9;
+  string customer_name = 10;
+  string customer_phone = 11;
+  string customer_email = 12;
+  string merchant_code = 13;
+  string update_date = 14;
+  string remark = 15;
+}
+
+message GetRefundsRequest {
+  string merchant_code = 1;
+  string page_size = 2;
+  string page = 3;
+  string order_by = 4;
+  string request_date_from = 5;
+  string request_date_to = 6;
+  string trx_number = 7;
+  string trx_date_from = 8;
+  string trx_date_to = 9;
+  string payment_channel = 10;
+  string status = 11;
+}
+message GetRefundsResponse { Refund refund = 1; }
+
+message ReadRefundRequest { int32 id = 1; }
+message ReadRefundResponse { Refund refund = 1; }
+
+service WebMerchantRefundService {
+  rpc GetRequestRefund(GetRequestRefundRequest)
+      returns (GetRequestRefundResponse) {};
+  rpc PostRequestRefund(PostRequestRefundRequest)
+      returns (PostRequestRefundResponse) {};
+  rpc GetRefunds(GetRefundsRequest) returns (stream GetRefundsResponse) {};
+  rpc ReadRefund(ReadRefundRequest) returns (ReadRefundResponse) {};
+}
